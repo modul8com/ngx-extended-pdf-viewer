@@ -4106,14 +4106,12 @@ function () {
 
     this.visible = true;
     this.div = document.querySelector(id + ' .progress');
+    this.bar = this.div.parentNode;
     this.height = height || 100;
     this.width = width || 100;
     this.units = units || '%';
+    this.div.style.height = this.height + this.units;
     this.percent = 0;
-    if (this.div) {
-      this.bar = this.div.parentNode;
-      this.div.style.height = this.height + this.units;
-    }
   }
 
   _createClass(ProgressBar, [{
@@ -4125,11 +4123,9 @@ function () {
         return;
       }
 
+      this.div.classList.remove('indeterminate');
       var progressSize = this.width * this._percent / 100;
-      if (this.div) {
-        this.div.classList.remove('indeterminate');
-        this.div.style.width = progressSize + this.units;
-      }
+      this.div.style.width = progressSize + this.units;
     }
   }, {
     key: "setWidth",
@@ -4153,10 +4149,8 @@ function () {
       // } // uncommented
       this.visible = false;
       this.div = document.querySelector('.progress'); // always set this new instead of trying to cache this value
-      if (this.div) {
-        this.bar = this.div.parentNode; // always set this new instead of trying to cache this value
-        this.bar.classList.add('hidden');
-      }
+      this.bar = this.div.parentNode; // always set this new instead of trying to cache this value
+      this.bar.classList.add('hidden');
       document.body.classList.remove('loadingInProgress');
     }
   }, {
@@ -12807,12 +12801,12 @@ function () {
       this.toggleButton.addEventListener('click', this.toggle.bind(this));
 
       var _loop = function _loop(button) {
-        var _this2$buttons$button = _this2.buttons[button],
-            element = _this2$buttons$button.element,
-            eventName = _this2$buttons$button.eventName,
-            close = _this2$buttons$button.close,
-            eventDetails = _this2$buttons$button.eventDetails;
-        if (element) {
+        if (!isNaN(button)) {
+          var _this2$buttons$button = _this2.buttons[button],
+              element = _this2$buttons$button.element,
+              eventName = _this2$buttons$button.eventName,
+              close = _this2$buttons$button.close,
+              eventDetails = _this2$buttons$button.eventDetails;
           element.addEventListener('click', function (evt) {
             if (eventName !== null) {
               var details = {
